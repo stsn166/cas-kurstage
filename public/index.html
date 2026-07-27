@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAS Strategic Brand Management – Rückmeldung Kurstage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F5F6F1;
+    --paper: #FFFFFF;
+    --ink: #22252A;
+    --ink-soft: #5B5F66;
+    --line: #E4E3DC;
+
+    --m1: #6B5CA5;
+    --m1-bg: #F1EEF9;
+
+    --m2: #2E6E8E;
+    --m2-bg: #EAF3F6;
+
+    --good: #3F8F5F;
+    --good-bg: #E9F5EE;
+    --bad: #A34632;
+    --bad-bg: #F7EAE6;
+
+    --gold: #B8901F;
+    --gold-bg: #FBF3D9;
+    --gold-line: #EBDBA0;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:40px 24px 80px;}
+
+  header{margin-bottom:22px;}
+  .eyebrow{
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:600;margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(28px,4vw,38px);
+    line-height:1.15;
+    margin:0 0 10px;
+  }
+  .sub{color:var(--ink-soft);font-size:15px;line-height:1.55;max-width:640px;}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+    margin:16px 0;
+  }
+  .card h3{
+    font-family:'Fraunces',serif;font-weight:600;font-size:16px;margin:0 0 8px;
+  }
+  .card p{font-size:14px;line-height:1.6;color:var(--ink-soft);margin:0;}
+
+  .comp-banner{
+    display:flex;align-items:center;gap:10px;
+    background:var(--gold-bg);border:1px solid var(--gold-line);
+    border-radius:12px;padding:12px 16px;margin:16px 0;
+    font-size:13.5px;color:var(--ink);line-height:1.5;
+  }
+  .comp-banner b{color:var(--gold);}
+
+  .timing-note{
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin:24px 0 20px;font-size:13px;color:var(--ink-soft);line-height:1.6;
+  }
+  .timing-note b{color:var(--ink);}
+
+  .progress-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+    margin:16px 0;
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+  .progress-num{font-family:'Fraunces',serif;font-size:26px;font-weight:600;white-space:nowrap;}
+  .progress-track{flex:1;height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progress-fill{height:100%;background:var(--good);border-radius:99px;transition:width .5s ease;}
+  .progress-legend{font-size:12.5px;color:var(--ink-soft);display:flex;gap:14px;white-space:nowrap;}
+  .legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;}
+
+  .modul-title{
+    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    margin:34px 0 14px;
+  }
+  .modul-title h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin:0;
+  }
+  .modul-title span{font-size:13.5px;color:var(--ink-soft);}
+  .m1 .modul-title h2{color:var(--m1);}
+  .m2 .modul-title h2{color:var(--m2);}
+
+  .row{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-left:4px solid transparent;
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:10px;
+    display:grid;
+    grid-template-columns:104px 1fr 260px;
+    gap:16px;
+    align-items:start;
+  }
+  .m1 .row{border-left-color:var(--m1);}
+  .m2 .row{border-left-color:var(--m2);}
+  .row.lnw{background:var(--gold-bg);border-left-color:var(--gold);border-color:var(--gold-line);}
+  .row.noaction{background:#FAFAF8;opacity:.8;}
+
+  .date-block{text-align:left;padding-top:2px;}
+  .date-block .datum{font-weight:700;font-size:15px;}
+  .date-block .tag{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+  .loc-badge{
+    display:inline-block;margin-top:6px;font-size:10.5px;color:var(--ink-soft);
+    background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 6px;
+  }
+  .time-badge{
+    display:inline-block;margin-top:4px;font-size:10.5px;font-weight:600;color:var(--m2);
+    background:var(--m2-bg);border:1px solid var(--m2);border-radius:6px;padding:2px 6px;
+  }
+
+  .content-block .inhalt{font-size:14.5px;line-height:1.4;margin-bottom:4px;}
+  .content-block .meta{font-size:12.5px;color:var(--ink-soft);}
+  .content-block .meta b{color:var(--ink);}
+
+  .action-block{display:flex;flex-direction:column;gap:8px;}
+
+  .btn-row{display:flex;gap:6px;width:100%;}
+  .btn{
+    flex:1;
+    padding:7px 8px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:12.5px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn.yes{color:var(--good);border-color:var(--good);}
+  .btn.yes:hover{background:var(--good-bg);}
+  .btn.no{color:var(--bad);border-color:var(--bad);}
+  .btn.no:hover{background:var(--bad-bg);}
+
+  .stamp{
+    display:inline-block;
+    padding:5px 12px;
+    border:2.5px double currentColor;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    transform:rotate(-4deg);
+    animation:stampIn .25s ease-out;
+    align-self:flex-start;
+  }
+  .stamp.yes{color:var(--good);background:var(--good-bg);}
+  .stamp.no{color:var(--bad);background:var(--bad-bg);transform:rotate(3deg);}
+  @keyframes stampIn{from{transform:scale(1.4) rotate(-4deg);opacity:0;}to{transform:scale(1) rotate(-4deg);opacity:1;}}
+  .stamp-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .stamp-meta{font-size:11px;color:var(--ink-soft);}
+  .change-link{font-size:11px;color:var(--ink-soft);text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+
+  .comment-box{width:100%;}
+  .comment-box textarea{
+    width:100%;min-height:44px;resize:vertical;
+    padding:7px 9px;border:1px solid var(--line);border-radius:7px;
+    font-size:12.5px;font-family:inherit;background:#fff;
+  }
+  .comment-box textarea:focus{outline:2px solid var(--m2);outline-offset:1px;}
+  .comment-box .saved-tag{font-size:10.5px;color:var(--good);margin-top:2px;display:none;}
+
+  .noaction-note{font-size:12.5px;color:var(--ink-soft);font-style:italic;padding-top:4px;}
+
+  .swatch-block{
+    border:1px dashed var(--m2);border-radius:9px;padding:10px 12px;margin-top:4px;background:var(--m2-bg);
+  }
+  .swatch-block .swatch-label{font-size:12px;font-weight:600;color:var(--m2);margin-bottom:6px;}
+  .swatch-block input{
+    width:100%;margin-bottom:6px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;
+    font-size:12px;font-family:inherit;background:#fff;
+  }
+  .swatch-block button{
+    width:100%;padding:7px 8px;border-radius:6px;border:1px solid var(--m2);background:#fff;color:var(--m2);
+    font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;
+  }
+  .swatch-block button:hover{background:var(--m2);color:#fff;}
+  .swatch-list{margin-top:8px;font-size:11.5px;color:var(--ink-soft);border-top:1px solid var(--m2-bg);padding-top:6px;}
+  .swatch-list div{margin-bottom:4px;}
+  .swatch-list b{color:var(--ink);}
+
+  footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  @media (max-width:640px){
+    .row{grid-template-columns:1fr;gap:10px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">CAS Strategic Brand Management · Frühling 2027</div>
+    <h1>Passt dir dein Kurstag im CAS?</h1>
+    <p class="sub">Wir würden euch für die neue Auflage des CAS extrem gern dabei haben! Hier geht es darum, zu prüfen, ob die vorgeschlagenen Kurstage bei euch passen. Die Session-Titel sind inhaltlich noch nicht fix – wir stimmen sie gern gemeinsam mit euch ab und verfeinern sie. Sie dienen hier vorerst zur Orientierung und damit ihr den Termin schon im Kalender blocken könnt.</p>
+  </header>
+
+  <div class="card">
+    <h3>Ambition des CAS Strategic Brand Management</h3>
+    <p>Der «CAS Strategic Brand Management» versteht sich als Influencer-Gefäss für die Markenführung: Praxis und Theorie verschränken sich zu echtem Erfahrungstransfer statt reinem Wissenstransfer. Der CAS holt das Markenthema aus dem Kommunikationssilo und rückt es ins Zentrum der Unternehmensführung. Aktuelle Ereignisse werden laufend ins Big Picture der Markenführung eingeordnet – so verstehen die Teilnehmenden Marke als Führungsinstrument über alle Unternehmensbereiche hinweg und gewinnen Sicherheit im Umgang mit ihrer Marke, gerade im Umgang mit KI.</p>
+    <p style="margin-top:12px;">Der Fokus liegt bewusst auf dem Strategischen: Mit der zunehmenden Verbreitung von KI werden operative Marketingaufgaben zunehmend kommodifiziert und automatisiert, während die eigentliche Differenzierung im Strategischen entsteht. Automatisierte Workflows brauchen eine klare, konsistente Markenleitlinie als Steuerungsinstrument – profitable Markenführung zusätzlich ein eigensinniges, unternehmerisches Wachstums-Mindset. Genau da wollen wir mit diesem CAS ansetzen.</p>
+  </div>
+
+  <div class="comp-banner">💰 <span>Vergütung: Pauschalbeträge gemäss unseren Ansätzen in der Weiterbildung – Halbtag (5 Lektionen) <b>CHF 1000</b> · Ganzer Tag (10 Lektionen) <b>CHF 2000</b></span></div>
+
+  <div class="progress-card">
+    <div class="progress-num" id="progressNum">–</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-legend">
+      <span><span class="legend-dot" style="background:var(--good)"></span>passt</span>
+      <span><span class="legend-dot" style="background:var(--bad)"></span>passt nicht</span>
+      <span><span class="legend-dot" style="background:var(--line)"></span>offen</span>
+    </div>
+  </div>
+
+  <div class="timing-note">
+    <b>Zeiten:</b> Freitagssessions dauern in der Regel <b>08:15–12:30 Uhr</b>, Mittagspause, <b>13:30–17:45 Uhr</b> (i.d.R. vor Ort, ZHAW oder bei Exkursionen extern). Samstagssessions dauern in der Regel <b>08:15–12:30 Uhr</b> (online via <b>MS Teams</b>).
+  </div>
+
+  <div id="list">Lädt Rückmeldungen …</div>
+
+  <footer>Rückmeldungen werden live für alle sichtbar gespeichert · CAS Strategic Brand Management, ZHAW IMM</footer>
+</div>
+
+<script>
+const schedule = [
+  {id:'r1', modul:1, datum:'05.03.27', tag:'FR', inhalt:'Grundlagen: Was ist eine Marke? Warum haben Unternehmen Marken? Was ist Brand Management?', lkt:5, dozent:'Anna-Maria Strässner'},
+  {id:'r2', modul:1, datum:'05.03.27', tag:'FR', inhalt:'Grundlagen: Was macht ein Brand Manager? Was machen brand-first Unternehmen anders?', lkt:5, dozent:'Jesse Bächler'},
+  {id:'r3', modul:1, datum:'06.03.27', tag:'SA', inhalt:'Grundlagen: Wie verändert KI die Markenführung?', lkt:5, dozent:'AM. Strässner & J. Bächler'},
+  {id:'r4', modul:1, datum:'19.03.27', tag:'FR', inhalt:'Exkursion Betty Bossi: Betty Bossi im Golden Circle', lkt:5, dozent:'Catherine Crowden'},
+  {id:'r5', modul:1, datum:'19.03.27', tag:'FR', inhalt:'AI vs. Brand Ownership: Wie behalte ich die Kontrolle über meine Marke?', lkt:5, dozent:'Michael Meier'},
+  {id:'r6', modul:1, datum:'20.03.27', tag:'SA', inhalt:'Positionierung: Wie finde ich den Fokuspunkt meiner Marke?', lkt:5, dozent:'David Wallmer'},
+  {id:'r7', modul:1, datum:'02.04.27', tag:'FR', inhalt:'Exkursion Victorinox: Victorinox im Golden Circle', lkt:5, dozent:'Patrick Raab'},
+  {id:'r8', modul:1, datum:'02.04.27', tag:'FR', inhalt:'Brandtelling: Wie entwickle ich die Kernbotschaft der Marke?', lkt:5, dozent:'Matthias M. Mattenberger'},
+  {id:'r9', modul:1, datum:'03.04.27', tag:'SA', inhalt:'Customer Centricity: Wie finde ich den Kundennutzen in meiner Marke?', lkt:5, dozent:'Nina Weschenfelder'},
+  {id:'r10', modul:1, datum:'16.04.27', tag:'FR', inhalt:'Exkursion The Living Circle: TLC im Golden Circle', lkt:5, dozent:'Fabio Slongo'},
+  {id:'r11', modul:1, datum:'16.04.27', tag:'FR', inhalt:'Distinctive Brand Assets: Wie mache ich meine Marke erkennbar?', lkt:5, dozent:'Willem Haen'},
+  {id:'r12', modul:1, datum:'17.04.27', tag:'SA', inhalt:'Brand Tracking: Wie messe ich meine Brand Equity?', lkt:5, dozent:'Jesse Bächler'},
+  {id:'r13', modul:1, datum:'30.04.27', tag:'FR', inhalt:'LNW 1: AI-readable Brand Guideline (Einzelarbeit, Schriftliches Dokument)', lkt:10, dozent:'AM. Strässner & J. Bächler', noAction:true, noActionNote:'Leistungsnachweis – keine Rückmeldung nötig', lnw:true},
+  {id:'r14', modul:2, datum:'21.05.27', tag:'FR', inhalt:'Exkursion Brack: Bracks Transformation im Blue Ocean', lkt:5, dozent:'Stefan Fraude'},
+  {id:'r15', modul:2, datum:'21.05.27', tag:'FR', inhalt:'Marke in der Transformation: Wie führe ich ein Rebranding im Team ein?', lkt:5, dozent:'Nora Kradolfer'},
+  {id:'r16', modul:2, datum:'22.05.27', tag:'SA', inhalt:'«Blue Ocean» als Mindset: Wie finde ich neue Wege für meine Marke?', lkt:5, dozent:'Michael Meier'},
+  {id:'r17', modul:2, datum:'04.06.27', tag:'FR', inhalt:'Exkursion Swatch Group: Swatch Groups Evolution im Blue Ocean', lkt:5, dozent:'TBD', swatch:true},
+  {id:'r18', modul:2, datum:'04.06.27', tag:'FR', inhalt:'Markenevolution & -architektur: Wie entwickle ich meine Marke weiter?', lkt:5, dozent:'Bettina Beurer-Züllig'},
+  {id:'r19', modul:2, datum:'09.06.27', tag:'MI', inhalt:'Schweizer Markenkongress', lkt:null, dozent:'AM. Strässner & J. Bächler', noAction:true, noActionNote:'Event-Teilnahme'},
+  {id:'r20', modul:2, datum:'11.06.27', tag:'FR', inhalt:'Exkursion On: Ons Wachstum im Blue Ocean', lkt:5, dozent:'Dana Müller'},
+  {id:'r21', modul:2, datum:'11.06.27', tag:'FR', inhalt:'Marke als Marge: Wie spreche ich als Markenverantwortlicher mit dem CFO?', lkt:5, dozent:'Sampo Lenzi'},
+  {id:'r22', modul:2, datum:'12.06.27', tag:'SA', inhalt:'Ausblick: Wo sehe ich «Whitespots» für meine Marke?', lkt:5, dozent:'David Wallmer'},
+  {id:'r23', modul:2, datum:'25.06.27', tag:'FR', inhalt:'LNW 2: Brand Vision (Einzel- oder Partnerarbeit, Präsentation)', lkt:10, dozent:'AM. Strässner & J. Bächler', noAction:true, noActionNote:'Leistungsnachweis – keine Rückmeldung nötig', lnw:true},
+];
+
+// Bei Tagen mit zwei Sessions: erster Eintrag = Vormittag, zweiter = Nachmittag
+const datumGroups = {};
+schedule.forEach(r => { (datumGroups[r.datum] = datumGroups[r.datum] || []).push(r); });
+Object.values(datumGroups).forEach(group => {
+  if(group.length > 1){
+    group.forEach((r, i) => { r.half = i === 0 ? 'Vormittag' : 'Nachmittag'; });
+  }
+});
+
+let state = {responses:{}, swatch:[]};
+
+async function loadState(){
+  try{
+    const res = await fetch('/api/state');
+    if(!res.ok) throw new Error('request failed');
+    return await res.json();
+  }catch(e){
+    console.error('Laden fehlgeschlagen', e);
+    return {responses:{}, swatch:[]};
+  }
+}
+
+async function postJson(url, body){
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body),
+  });
+  if(!res.ok) throw new Error('request failed');
+  return await res.json();
+}
+
+function getLocation(r){
+  if(r.tag === 'SA') return 'Online';
+  if(r.tag === 'FR') return r.inhalt.startsWith('Exkursion') ? 'Vor Ort (extern)' : 'Vor Ort (ZHAW)';
+  return null;
+}
+
+function updateProgress(){
+  const actionable = schedule.filter(r=>!r.noAction && !r.swatch);
+  const total = actionable.length;
+  const answered = actionable.filter(r=>state.responses[r.id] && state.responses[r.id].status).length;
+  document.getElementById('progressNum').textContent = answered + ' / ' + total;
+  document.getElementById('progressFill').style.width = (total? (answered/total*100):0) + '%';
+}
+
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function rowHtml(r){
+  const resp = state.responses[r.id] || {};
+  const classes = ['row', 'm'+r.modul];
+  if(r.lnw) classes.push('lnw');
+  if(r.noAction) classes.push('noaction');
+  const loc = getLocation(r);
+
+  let actionHtml;
+  if(r.noAction){
+    actionHtml = `<div class="noaction-note">${escapeHtml(r.noActionNote)}</div>`;
+  } else {
+    let topHtml = '';
+    if(!r.swatch){
+      if(resp.status){
+        const isYes = resp.status === 'yes';
+        topHtml = `
+          <div class="stamp-row">
+            <div class="stamp ${isYes?'yes':'no'}">${isYes?'Passt':'Passt nicht'}</div>
+            <button class="change-link" data-action="change" data-id="${r.id}">ändern</button>
+          </div>
+          <div class="stamp-meta">Stand: ${escapeHtml(resp.timestamp||'')}</div>
+        `;
+      } else {
+        topHtml = `
+          <div class="btn-row">
+            <button class="btn yes" data-action="yes" data-id="${r.id}">✓ Passt</button>
+            <button class="btn no" data-action="no" data-id="${r.id}">✕ Passt nicht</button>
+          </div>
+        `;
+      }
+    }
+    const commentHtml = `
+      <div class="comment-box">
+        <textarea data-role="comment" data-id="${r.id}" placeholder="Kommentar (optional)">${escapeHtml(resp.comment||'')}</textarea>
+        <div class="saved-tag" data-savedtag="${r.id}">Gespeichert ✓</div>
+      </div>
+    `;
+    let swatchHtml = '';
+    if(r.swatch){
+      const entries = state.swatch.filter(s=>s.rowId===r.id);
+      swatchHtml = `
+        <div class="swatch-block">
+          <div class="swatch-label">Kennst du jemanden bei Swatch Group?</div>
+          <input type="text" data-role="swatchContact" data-id="${r.id}" placeholder="Name Ansprechperson">
+          <input type="text" data-role="swatchEmail" data-id="${r.id}" placeholder="E-Mail">
+          <input type="text" data-role="swatchSubmitter" data-id="${r.id}" placeholder="Dein Name">
+          <button data-action="swatchSubmit" data-id="${r.id}">Kontakt einreichen</button>
+          ${entries.length ? `<div class="swatch-list">${entries.map(e=>`<div><b>${escapeHtml(e.contactName)}</b> (${escapeHtml(e.contactEmail)}) – eingereicht von ${escapeHtml(e.submittedBy)}, ${escapeHtml(e.timestamp)}</div>`).join('')}</div>` : ''}
+        </div>
+      `;
+      actionHtml = swatchHtml + commentHtml;
+    } else {
+      actionHtml = topHtml + commentHtml;
+    }
+  }
+
+  return `
+    <div class="${classes.join(' ')}" data-row="${r.id}">
+      <div class="date-block">
+        <div class="datum">${r.datum}</div>
+        <div class="tag">${r.tag}</div>
+        ${loc ? `<div class="loc-badge">${loc}</div>` : ''}
+        ${r.half ? `<div class="time-badge">${r.half}</div>` : ''}
+      </div>
+      <div class="content-block">
+        <div class="inhalt">${escapeHtml(r.inhalt)}</div>
+        <div class="meta"><b>${escapeHtml(r.dozent)}</b>${r.lkt?' · '+r.lkt+' Lkt':''}</div>
+      </div>
+      <div class="action-block">
+        ${actionHtml}
+      </div>
+    </div>
+  `;
+}
+
+function render(){
+  const m1 = schedule.filter(r=>r.modul===1);
+  const m2 = schedule.filter(r=>r.modul===2);
+  document.getElementById('list').innerHTML = `
+    <div class="m1">
+      <div class="modul-title"><h2>Modul 1</h2><span>Die Marke analysieren und definieren</span></div>
+      ${m1.map(rowHtml).join('')}
+    </div>
+    <div class="m2">
+      <div class="modul-title"><h2>Modul 2</h2><span>Die Marke zukunftsfähig weiterentwickeln</span></div>
+      ${m2.map(rowHtml).join('')}
+    </div>
+  `;
+  updateProgress();
+  attachHandlers();
+}
+
+function attachHandlers(){
+  document.querySelectorAll('button[data-action="yes"], button[data-action="no"]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.dataset.id;
+      try{
+        state = await postJson('/api/response', {id, status: btn.dataset.action});
+        render();
+      }catch(e){
+        console.error('Speichern fehlgeschlagen', e);
+      }
+    });
+  });
+  document.querySelectorAll('button[data-action="change"]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.dataset.id;
+      try{
+        state = await postJson('/api/response/clear', {id});
+        render();
+      }catch(e){
+        console.error('Speichern fehlgeschlagen', e);
+      }
+    });
+  });
+  document.querySelectorAll('textarea[data-role="comment"]').forEach(ta=>{
+    ta.addEventListener('blur', async ()=>{
+      const id = ta.dataset.id;
+      const existing = state.responses[id] || {status:null, comment:'', timestamp:''};
+      const newComment = ta.value.trim();
+      if((existing.comment||'') === newComment) return;
+      try{
+        state = await postJson('/api/comment', {id, comment: newComment});
+        const tag = document.querySelector(`[data-savedtag="${id}"]`);
+        if(tag){ tag.style.display='block'; setTimeout(()=>{ if(tag) tag.style.display='none'; }, 1800); }
+      }catch(e){
+        console.error('Speichern fehlgeschlagen', e);
+      }
+    });
+  });
+  document.querySelectorAll('button[data-action="swatchSubmit"]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.dataset.id;
+      const contactName = document.querySelector(`input[data-role="swatchContact"][data-id="${id}"]`);
+      const contactEmail = document.querySelector(`input[data-role="swatchEmail"][data-id="${id}"]`);
+      const submitter = document.querySelector(`input[data-role="swatchSubmitter"][data-id="${id}"]`);
+      if(!contactName.value.trim() || !submitter.value.trim()){
+        contactName.style.borderColor = 'var(--bad)';
+        submitter.style.borderColor = 'var(--bad)';
+        setTimeout(()=>{ contactName.style.borderColor=''; submitter.style.borderColor=''; }, 1200);
+        return;
+      }
+      try{
+        state = await postJson('/api/swatch', {
+          rowId: id,
+          contactName: contactName.value.trim(),
+          contactEmail: contactEmail.value.trim(),
+          submittedBy: submitter.value.trim(),
+        });
+        render();
+      }catch(e){
+        console.error('Speichern fehlgeschlagen', e);
+      }
+    });
+  });
+}
+
+let polling = false;
+async function poll(){
+  if(polling) return;
+  const focused = document.activeElement;
+  const skipRoles = ['comment','swatchContact','swatchEmail','swatchSubmitter'];
+  if(focused && focused.dataset && skipRoles.includes(focused.dataset.role)) return;
+  polling = true;
+  state = await loadState();
+  render();
+  polling = false;
+}
+
+(async function init(){
+  state = await loadState();
+  render();
+  setInterval(poll, 15000);
+})();
+</script>
+</body>
+</html>
