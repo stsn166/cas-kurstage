@@ -131,16 +131,44 @@
   .row.lnw{background:var(--gold-bg);border-left-color:var(--gold);border-color:var(--gold-line);}
   .row.noaction{background:#FAFAF8;opacity:.8;}
 
+  .day-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-left:4px solid transparent;
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:10px;
+    display:grid;
+    grid-template-columns:104px 1fr;
+    gap:16px;
+    align-items:start;
+  }
+  .m1 .day-card{border-left-color:var(--m1);}
+  .m2 .day-card{border-left-color:var(--m2);}
+
+  .day-sessions{display:flex;flex-direction:column;}
+  .day-session{
+    display:grid;
+    grid-template-columns:1fr 260px;
+    gap:16px;
+    align-items:start;
+    padding:14px 0;
+  }
+  .day-session:first-child{padding-top:0;}
+  .day-session:last-child{padding-bottom:0;}
+  .day-session + .day-session{border-top:1px solid var(--line);}
+
+  .session-half{
+    display:inline-block;margin-bottom:6px;font-size:10.5px;font-weight:600;color:var(--m2);
+    background:var(--m2-bg);border:1px solid var(--m2);border-radius:6px;padding:2px 6px;
+  }
+
   .date-block{text-align:left;padding-top:2px;}
   .date-block .datum{font-weight:700;font-size:15px;}
   .date-block .tag{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
   .loc-badge{
     display:inline-block;margin-top:6px;font-size:10.5px;color:var(--ink-soft);
     background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 6px;
-  }
-  .time-badge{
-    display:inline-block;margin-top:4px;font-size:10.5px;font-weight:600;color:var(--m2);
-    background:var(--m2-bg);border:1px solid var(--m2);border-radius:6px;padding:2px 6px;
   }
 
   .content-block .inhalt{font-size:14.5px;line-height:1.4;margin-bottom:4px;}
@@ -220,6 +248,8 @@
 
   @media (max-width:640px){
     .row{grid-template-columns:1fr;gap:10px;}
+    .day-card{grid-template-columns:1fr;gap:10px;}
+    .day-session{grid-template-columns:1fr;gap:10px;}
   }
 </style>
 </head>
@@ -291,7 +321,7 @@ const datumGroups = {};
 schedule.forEach(r => { (datumGroups[r.datum] = datumGroups[r.datum] || []).push(r); });
 Object.values(datumGroups).forEach(group => {
   if(group.length > 1){
-    group.forEach((r, i) => { r.half = i === 0 ? 'Vormittag' : 'Nachmittag'; });
+    group.forEach((r, i) => { r.half = i === 0 ? 'Vormittag' : 'Nachmittag'; r.dayGroup = group; });
   }
   // Wenn eine Session des Tages eine Exkursion ist, bleibt der ganze Tag extern
   // (kein Rückweg an die ZHAW für die zweite Session).
@@ -341,61 +371,69 @@ function escapeHtml(s){
   return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-function rowHtml(r){
+function sessionActionHtml(r){
+  if(r.noAction){
+    return `<div class="noaction-note">${escapeHtml(r.noActionNote)}</div>`;
+  }
   const resp = state.responses[r.id] || {};
+  let topHtml = '';
+  if(!r.swatch){
+    if(resp.status){
+      const isYes = resp.status === 'yes';
+      topHtml = `
+        <div class="stamp-row">
+          <div class="stamp ${isYes?'yes':'no'}">${isYes?'Passt':'Passt nicht'}</div>
+          <button class="change-link" data-action="change" data-id="${r.id}">ändern</button>
+        </div>
+        <div class="stamp-meta">Stand: ${escapeHtml(resp.timestamp||'')}</div>
+      `;
+    } else {
+      topHtml = `
+        <div class="btn-row">
+          <button class="btn yes" data-action="yes" data-id="${r.id}">✓ Passt</button>
+          <button class="btn no" data-action="no" data-id="${r.id}">✕ Passt nicht</button>
+        </div>
+      `;
+    }
+  }
+  const commentHtml = `
+    <div class="comment-box">
+      <textarea data-role="comment" data-id="${r.id}" placeholder="Kommentar (optional)">${escapeHtml(resp.comment||'')}</textarea>
+      <div class="saved-tag" data-savedtag="${r.id}">Gespeichert ✓</div>
+    </div>
+  `;
+  if(r.swatch){
+    const entries = state.swatch.filter(s=>s.rowId===r.id);
+    const swatchHtml = `
+      <div class="swatch-block">
+        <div class="swatch-label">Kennst du jemanden bei Swatch Group?</div>
+        <input type="text" data-role="swatchContact" data-id="${r.id}" placeholder="Name Ansprechperson">
+        <input type="text" data-role="swatchEmail" data-id="${r.id}" placeholder="E-Mail">
+        <input type="text" data-role="swatchSubmitter" data-id="${r.id}" placeholder="Dein Name">
+        <button data-action="swatchSubmit" data-id="${r.id}">Kontakt einreichen</button>
+        ${entries.length ? `<div class="swatch-list">${entries.map(e=>`<div><b>${escapeHtml(e.contactName)}</b> (${escapeHtml(e.contactEmail)}) – eingereicht von ${escapeHtml(e.submittedBy)}, ${escapeHtml(e.timestamp)}</div>`).join('')}</div>` : ''}
+      </div>
+    `;
+    return swatchHtml + commentHtml;
+  }
+  return topHtml + commentHtml;
+}
+
+function sessionContentHtml(r, halfBadge){
+  return `
+    <div class="content-block">
+      ${halfBadge ? `<div class="session-half">${escapeHtml(r.half)}</div>` : ''}
+      <div class="inhalt">${escapeHtml(r.inhalt)}</div>
+      <div class="meta"><b>${escapeHtml(r.dozent)}</b>${r.lkt?' · '+r.lkt+' Lkt':''}</div>
+    </div>
+  `;
+}
+
+function rowHtml(r){
   const classes = ['row', 'm'+r.modul];
   if(r.lnw) classes.push('lnw');
   if(r.noAction) classes.push('noaction');
   const loc = getLocation(r);
-
-  let actionHtml;
-  if(r.noAction){
-    actionHtml = `<div class="noaction-note">${escapeHtml(r.noActionNote)}</div>`;
-  } else {
-    let topHtml = '';
-    if(!r.swatch){
-      if(resp.status){
-        const isYes = resp.status === 'yes';
-        topHtml = `
-          <div class="stamp-row">
-            <div class="stamp ${isYes?'yes':'no'}">${isYes?'Passt':'Passt nicht'}</div>
-            <button class="change-link" data-action="change" data-id="${r.id}">ändern</button>
-          </div>
-          <div class="stamp-meta">Stand: ${escapeHtml(resp.timestamp||'')}</div>
-        `;
-      } else {
-        topHtml = `
-          <div class="btn-row">
-            <button class="btn yes" data-action="yes" data-id="${r.id}">✓ Passt</button>
-            <button class="btn no" data-action="no" data-id="${r.id}">✕ Passt nicht</button>
-          </div>
-        `;
-      }
-    }
-    const commentHtml = `
-      <div class="comment-box">
-        <textarea data-role="comment" data-id="${r.id}" placeholder="Kommentar (optional)">${escapeHtml(resp.comment||'')}</textarea>
-        <div class="saved-tag" data-savedtag="${r.id}">Gespeichert ✓</div>
-      </div>
-    `;
-    let swatchHtml = '';
-    if(r.swatch){
-      const entries = state.swatch.filter(s=>s.rowId===r.id);
-      swatchHtml = `
-        <div class="swatch-block">
-          <div class="swatch-label">Kennst du jemanden bei Swatch Group?</div>
-          <input type="text" data-role="swatchContact" data-id="${r.id}" placeholder="Name Ansprechperson">
-          <input type="text" data-role="swatchEmail" data-id="${r.id}" placeholder="E-Mail">
-          <input type="text" data-role="swatchSubmitter" data-id="${r.id}" placeholder="Dein Name">
-          <button data-action="swatchSubmit" data-id="${r.id}">Kontakt einreichen</button>
-          ${entries.length ? `<div class="swatch-list">${entries.map(e=>`<div><b>${escapeHtml(e.contactName)}</b> (${escapeHtml(e.contactEmail)}) – eingereicht von ${escapeHtml(e.submittedBy)}, ${escapeHtml(e.timestamp)}</div>`).join('')}</div>` : ''}
-        </div>
-      `;
-      actionHtml = swatchHtml + commentHtml;
-    } else {
-      actionHtml = topHtml + commentHtml;
-    }
-  }
 
   return `
     <div class="${classes.join(' ')}" data-row="${r.id}">
@@ -403,17 +441,49 @@ function rowHtml(r){
         <div class="datum">${r.datum}</div>
         <div class="tag">${r.tag}</div>
         ${loc ? `<div class="loc-badge">${loc}</div>` : ''}
-        ${r.half ? `<div class="time-badge">${r.half}</div>` : ''}
       </div>
-      <div class="content-block">
-        <div class="inhalt">${escapeHtml(r.inhalt)}</div>
-        <div class="meta"><b>${escapeHtml(r.dozent)}</b>${r.lkt?' · '+r.lkt+' Lkt':''}</div>
-      </div>
+      ${sessionContentHtml(r, false)}
       <div class="action-block">
-        ${actionHtml}
+        ${sessionActionHtml(r)}
       </div>
     </div>
   `;
+}
+
+function dayCardHtml(group){
+  const first = group[0];
+  const classes = ['day-card', 'm'+first.modul];
+  const loc = getLocation(first);
+
+  const sessionsHtml = group.map(r => `
+    <div class="day-session" data-row="${r.id}">
+      ${sessionContentHtml(r, true)}
+      <div class="action-block">
+        ${sessionActionHtml(r)}
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="${classes.join(' ')}">
+      <div class="date-block">
+        <div class="datum">${first.datum}</div>
+        <div class="tag">${first.tag}</div>
+        ${loc ? `<div class="loc-badge">${loc}</div>` : ''}
+      </div>
+      <div class="day-sessions">
+        ${sessionsHtml}
+      </div>
+    </div>
+  `;
+}
+
+function moduleListHtml(rows){
+  return rows.map(r => {
+    if(r.half === 'Nachmittag') return '';
+    if(r.dayGroup) return dayCardHtml(r.dayGroup);
+    return rowHtml(r);
+  }).join('');
 }
 
 function render(){
@@ -422,11 +492,11 @@ function render(){
   document.getElementById('list').innerHTML = `
     <div class="m1">
       <div class="modul-title"><h2>Modul 1</h2><span>Die Marke analysieren und definieren</span></div>
-      ${m1.map(rowHtml).join('')}
+      ${moduleListHtml(m1)}
     </div>
     <div class="m2">
       <div class="modul-title"><h2>Modul 2</h2><span>Die Marke zukunftsfähig weiterentwickeln</span></div>
-      ${m2.map(rowHtml).join('')}
+      ${moduleListHtml(m2)}
     </div>
   `;
   updateProgress();
