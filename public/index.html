@@ -293,6 +293,11 @@ Object.values(datumGroups).forEach(group => {
   if(group.length > 1){
     group.forEach((r, i) => { r.half = i === 0 ? 'Vormittag' : 'Nachmittag'; });
   }
+  // Wenn eine Session des Tages eine Exkursion ist, bleibt der ganze Tag extern
+  // (kein Rückweg an die ZHAW für die zweite Session).
+  if(group.some(r => r.inhalt.startsWith('Exkursion'))){
+    group.forEach(r => { r.externDay = true; });
+  }
 });
 
 let state = {responses:{}, swatch:[]};
@@ -320,7 +325,7 @@ async function postJson(url, body){
 
 function getLocation(r){
   if(r.tag === 'SA') return 'Online';
-  if(r.tag === 'FR') return r.inhalt.startsWith('Exkursion') ? 'Vor Ort (extern)' : 'Vor Ort (ZHAW)';
+  if(r.tag === 'FR') return r.externDay ? 'Vor Ort (extern)' : 'Vor Ort (ZHAW)';
   return null;
 }
 
